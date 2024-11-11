@@ -11,11 +11,19 @@ module.exports = {
             name: {
                 type: Sequelize.STRING
             },
+            name: {
+                type: Sequelize.STRING
+            },
+            icon: {
+                type: Sequelize.TEXT
+            },
             createdAt: {
-                type: Sequelize.DATE
+                type: Sequelize.DATE,
+                defaultValue: Sequelize.fn('NOW')
             },
             updatedAt: {
-                type: Sequelize.DATE
+                type: Sequelize.DATE,
+                defaultValue: Sequelize.fn('NOW')
             }
         });
     },

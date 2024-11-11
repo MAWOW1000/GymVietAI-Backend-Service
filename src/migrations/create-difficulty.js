@@ -15,12 +15,14 @@ module.exports = {
                 type: Sequelize.STRING
             },
             createdAt: {
-                type: Sequelize.DATE
+                type: Sequelize.DATE,
+                defaultValue: Sequelize.fn('NOW')
             },
             updatedAt: {
-                type: Sequelize.DATE
+                type: Sequelize.DATE,
+                defaultValue: Sequelize.fn('NOW')
             }
-        }, {schema: 'public'});
+        }, { schema: 'public' });
     },
     down: async (queryInterface, Sequelize) => {
         await queryInterface.dropTable('Difficulty');

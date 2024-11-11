@@ -35,6 +35,24 @@ const getListExercise = async (req, res) => {
     }
 }
 
+const getListExerciseMultipleChoice = async (req, res) => {
+    try {
+        const { groupMuscle, difficulty, equipment, limit, page } = req.body;
+        const result = await exerciseService.getExerciseByMultipleOptions(groupMuscle, difficulty, equipment, +limit, +page)
+        return res.status(200).json({
+            EC: result.EC,
+            EM: result.EM,
+            DT: result.DT
+        })
+    } catch (err) {
+        return res.status(500).json({
+            EC: -1,
+            EM: "Internal Server Error",
+            DT: ""
+        })
+    }
+}
+
 const getListEquipment = async (req, res) => {
     try {
         const result = await exerciseService.getEquipmentAll()
@@ -68,6 +86,43 @@ const getListGroupMuscle = async (req, res) => {
         })
     }
 }
+
+const getListExercisePagination = async (req, res) => {
+    try {
+        const { groupMuscle, difficulty, equipment, limit, page } = req.body;
+        const result = await exerciseService.getExerciseByOptionsPagination(groupMuscle, difficulty, equipment, +limit, +page)
+        return res.status(200).json({
+            EC: result.EC,
+            EM: result.EM,
+            DT: result.DT
+        })
+    } catch (err) {
+        return res.status(500).json({
+            EC: -1,
+            EM: "Internal Server Error",
+            DT: ""
+        })
+    }
+}
+
+const getNumberOfExercise = async (req, res) => {
+    try {
+        const result = await exerciseService.getExerciseAll()
+        return res.status(200).json({
+            EC: result.EC,
+            EM: result.EM,
+            DT: result.DT
+        })
+    } catch (err) {
+        return res.status(500).json({
+            EC: -1,
+            EM: "Internal Server Error",
+            DT: ""
+        })
+    }
+}
+
+
 module.exports = {
-    getListExercise, getListEquipment, getListGroupMuscle
+    getListExercise, getListEquipment, getListGroupMuscle, getListExercisePagination, getNumberOfExercise, getListExerciseMultipleChoice
 }

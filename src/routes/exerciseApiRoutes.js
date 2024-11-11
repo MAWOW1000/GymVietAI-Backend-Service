@@ -8,6 +8,10 @@ router.get("/", (req, res) => {
 })
 
 router.post("/options", exerciseController.getListExercise)
+router.post("/options-multiple-choice", exerciseController.getListExerciseMultipleChoice)
+router.post("/options-pagination", exerciseController.getListExercisePagination)
+
+router.get("/number-of-exercise", exerciseController.getNumberOfExercise)
 router.get("/equipments", exerciseController.getListEquipment)
 router.get("/group-muscles", exerciseController.getListGroupMuscle)
 

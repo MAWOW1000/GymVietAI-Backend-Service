@@ -12,16 +12,19 @@ module.exports = {
         type: Sequelize.STRING
       },
       video_male: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       video_female: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
+      },
+      link_description: {
+        type: Sequelize.TEXT
       },
       step: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       group_muscle_id: {
         allowNull: false,
@@ -48,10 +51,12 @@ module.exports = {
         }
       },
       createdAt: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('NOW')
       },
       updatedAt: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('NOW')
       }
     });
   },
