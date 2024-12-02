@@ -20,10 +20,16 @@ module.exports = {
       description: {
         type: Sequelize.TEXT
       },
+      description_vi: {
+        type: Sequelize.TEXT
+      },
       link_description: {
         type: Sequelize.TEXT
       },
       step: {
+        type: Sequelize.TEXT
+      },
+      step_vi: {
         type: Sequelize.TEXT
       },
       group_muscle_id: {

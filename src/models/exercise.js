@@ -21,7 +21,9 @@ module.exports = (sequelize, DataTypes) => {
     video_male: DataTypes.STRING,
     video_female: DataTypes.STRING,
     description: DataTypes.STRING,
+    description_vi: DataTypes.STRING,
     step: DataTypes.STRING,
+    step_vi: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Exercise',

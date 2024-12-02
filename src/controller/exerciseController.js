@@ -1,21 +1,4 @@
 import exerciseService from '../service/exerciseService'
-// const getListExercise = async (req, res) => {
-//     try {
-//         const { group_muscle_id, difficulty_id, equipment_id } = req.body;
-//         const result = await exerciseService.getExerciseByOptions(group_muscle_id, difficulty_id, equipment_id)
-//         return res.status(200).json({
-//             EC: result.EC,
-//             EM: result.EM,
-//             DT: result.DT
-//         })
-//     } catch (err) {
-//         return res.status(500).json({
-//             EC: -1,
-//             EM: "Internal Server Error",
-//             DT: ""
-//         })
-//     }
-// }
 
 const getListExercise = async (req, res) => {
     try {
@@ -122,7 +105,6 @@ const getNumberOfExercise = async (req, res) => {
     }
 }
 
-
 module.exports = {
-    getListExercise, getListEquipment, getListGroupMuscle, getListExercisePagination, getNumberOfExercise, getListExerciseMultipleChoice
+    getListExercise, getListEquipment, getListGroupMuscle, getListExercisePagination, getNumberOfExercise, getListExerciseMultipleChoice,
 }

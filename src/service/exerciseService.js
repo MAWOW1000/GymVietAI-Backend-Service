@@ -11,61 +11,6 @@ const getExercise = async (field) => {
     return user.get({ plain: true });
 }
 
-// const getExerciseByOptions = async (group_muscle_id, difficulty_id, equipment_id) => {
-//     try {
-//         let exercise = [];
-//         let whereClause = {};
-//         if (group_muscle_id) {
-//             whereClause.group_muscle_id = group_muscle_id;
-//         }
-//         if (difficulty_id) {
-//             whereClause.difficulty_id = difficulty_id;
-//         }
-//         if (equipment_id) {
-//             whereClause.equipment_id = equipment_id;
-//         }
-//         exercise = await db.Exercise.findAll({
-//             where: whereClause,
-//             attributes: ['name', 'step', 'video_male', 'video_female', 'description'],
-//             include: [
-//                 {
-//                     association: 'GroupMuscle',
-//                     attributes: ["name"],
-//                 },
-//                 {
-//                     association: 'Equipment',
-//                     attributes: ["name"],
-//                 },
-//                 {
-//                     association: 'Difficulty',
-//                     attributes: ["name"],
-//                 },
-//             ],
-//             raw: true
-//         })
-//         if (exercise) {
-//             return {
-//                 EC: 0,
-//                 EM: 'Find Exercise Success',
-//                 DT: exercise
-//             }
-//         }
-//         else {
-//             return {
-//                 EC: 1,
-//                 EM: 'Find Exercise Fail',
-//                 DT: []
-//             }
-//         }
-//     } catch (e) {
-//         return {
-//             EC: -1,
-//             EM: 'Error From Service',
-//             DT: []
-//         }
-//     }
-// }
-
 const getExerciseByOptions = async (groupMuscle, difficulty, equipment) => {
     try {
         let exercise = []
@@ -82,7 +27,7 @@ const getExerciseByOptions = async (groupMuscle, difficulty, equipment) => {
         }
         exercise = await db.Exercise.findAll({
             where: whereClause,
-            attributes: ['name', 'step', 'video_male', 'video_female', 'description', 'link_description'],
+            attributes: ['name', 'step', 'step_vi', 'video_male', 'video_female', 'description', 'description_vi', 'link_description'],
             include: [
                 {
                     association: 'GroupMuscle',
@@ -143,7 +88,7 @@ const getExerciseByOptionsPagination = async (groupMuscle, difficulty, equipment
         }
         const { count, rows } = await db.Exercise.findAndCountAll({
             where: whereClause,
-            attributes: ['name', 'step', 'video_male', 'video_female', 'description', 'link_description'],
+            attributes: ['name', 'step', 'step_vi', 'video_male', 'video_female', 'description', 'description_vi', 'link_description'],
             include: [
                 {
                     association: 'GroupMuscle',
@@ -190,7 +135,6 @@ const getExerciseByOptionsPagination = async (groupMuscle, difficulty, equipment
     }
 };
 
-
 const getExerciseByMultipleOptions = async (groupMuscle, difficulty, equipment, limit, page) => {
     try {
         const whereClause = {};
@@ -212,7 +156,7 @@ const getExerciseByMultipleOptions = async (groupMuscle, difficulty, equipment, 
 
         const { count, rows } = await db.Exercise.findAndCountAll({
             where: whereClause,
-            attributes: ['name', 'step', 'video_male', 'video_female', 'description', 'link_description'],
+            attributes: ['name', 'step', 'step_vi', 'video_male', 'video_female', 'description', 'description_vi', 'link_description'],
             include: [
                 {
                     model: db.GroupMuscle, // Use model instead of association
@@ -346,5 +290,5 @@ const getExerciseAll = async () => {
     }
 }
 module.exports = {
-    getExercise, getExerciseByOptions, getEquipmentAll, getGroupMuscleAll, getExerciseByOptionsPagination, getExerciseAll, getExerciseByMultipleOptions
+    getExercise, getExerciseByOptions, getEquipmentAll, getGroupMuscleAll, getExerciseByOptionsPagination, getExerciseAll, getExerciseByMultipleOptions,
 }
