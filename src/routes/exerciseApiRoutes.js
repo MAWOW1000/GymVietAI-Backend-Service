@@ -15,4 +15,7 @@ router.get("/number-of-exercise", exerciseController.getNumberOfExercise)
 router.get("/equipments", exerciseController.getListEquipment)
 router.get("/group-muscles", exerciseController.getListGroupMuscle)
 
+//Call to AI server
+router.post("/create-exercise", exerciseController.postCreateExercise)
+
 export default router;

@@ -1,4 +1,5 @@
 import exerciseService from '../service/exerciseService'
+import axios from 'axios';
 
 const getListExercise = async (req, res) => {
     try {
@@ -105,6 +106,50 @@ const getNumberOfExercise = async (req, res) => {
     }
 }
 
+const postCreateExercise = async (req, res) => {
+    try {
+        let { Gender, Weight, Height, Age, continent } = req.body;
+
+        // Convert to numbers if possible
+        Weight = Number(Weight);
+        Height = Number(Height);
+        Age = Number(Age);
+
+        // Basic input validation
+        if (!Gender || isNaN(Weight) || isNaN(Height) || isNaN(Age) || !continent) {
+            return res.status(400).json({
+                EC: -1,
+                EM: "Missing required fields or invalid number inputs",
+                DT: ""
+            });
+        }
+
+        // Call the AI server API
+        const response = await axios.post('http://127.0.0.1:5001/api/workout-plan', {
+            Gender,
+            Weight,
+            Height,
+            Age,
+            continent,
+        });
+
+        // Return the response from the AI server to the client
+        return res.status(200).json({
+            EC: 0,
+            EM: 'Success',
+            DT: response.data
+        });
+    } catch (err) {
+        console.error(err); // Log the error for debugging
+        return res.status(500).json({
+            EC: -1,
+            EM: "Internal Server Error",
+            DT: ""
+        });
+    }
+}
+
 module.exports = {
     getListExercise, getListEquipment, getListGroupMuscle, getListExercisePagination, getNumberOfExercise, getListExerciseMultipleChoice,
+    postCreateExercise,
 }
