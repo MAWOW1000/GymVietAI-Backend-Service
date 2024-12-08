@@ -1,15 +1,25 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    // Create UUID generation function
+    await queryInterface.sequelize.query(`
+      CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+    `);
+
     await queryInterface.createTable('Exercise', {
-      id: {
+      exercise_id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.literal('uuid_generate_v4()') // Use UUID generation function
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      name_vi: {
+        type: Sequelize.STRING,
+        allowNull: false
       },
       video_male: {
         type: Sequelize.TEXT
@@ -34,39 +44,33 @@ module.exports = {
       },
       group_muscle_id: {
         allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'GroupMuscle',
-          key: 'id'
-        }
+        type: Sequelize.INTEGER
       },
       equipment_id: {
         allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Equipment',
-          key: 'id'
-        }
+        type: Sequelize.INTEGER
       },
       difficulty_id: {
         allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Difficulty',
-          key: 'id'
-        }
+        type: Sequelize.INTEGER
       },
       createdAt: {
+        allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.fn('NOW')
       },
       updatedAt: {
+        allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.fn('NOW')
       }
-    });
+    }, { schema: 'public' });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Exercise');
+    await queryInterface.dropTable('Exercise', { schema: 'public' });
+    // Optionally, drop the UUID generation function if no longer needed
+    await queryInterface.sequelize.query(`
+      DROP EXTENSION IF EXISTS "uuid-ossp";
+    `);
   }
 };

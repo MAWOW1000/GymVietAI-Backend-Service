@@ -10,15 +10,37 @@ module.exports = (sequelize, DataTypes) => {
     }
     WorkoutPlan.init({
         workout_plan_id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.UUID,
             primaryKey: true,
-            autoIncrement: true
+            defaultValue: DataTypes.UUIDV4
         },
         bmi_level_id: DataTypes.INTEGER,
-        training_split: DataTypes.STRING,
-        goal: DataTypes.STRING,
-        training_level: DataTypes.STRING,
-        important_considerations: DataTypes.STRING
+        workout_week_id: DataTypes.INTEGER,
+        consideration_id: DataTypes.INTEGER,
+        training_split: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        training_split_vi: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        goal: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        goal_vi: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        training_level: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        training_level_vi: {
+            type: DataTypes.STRING,
+            allowNull: false
+        }
     }, {
         sequelize,
         modelName: 'WorkoutPlan',

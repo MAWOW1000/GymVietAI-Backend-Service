@@ -1,28 +1,29 @@
 import { includes } from 'lodash';
-import db from '../models/index'
+import db from '../models/index';
 import { raw } from 'body-parser';
 import { where } from 'sequelize/lib/sequelize';
 const { Op } = require('sequelize');
+
 const getExercise = async (field) => {
     let user = {};
     user = await db.User.findOne({
         where: { id: id },
-    })
+    });
     return user.get({ plain: true });
-}
+};
 
 const getExerciseByOptions = async (groupMuscle, difficulty, equipment) => {
     try {
-        let exercise = []
+        let exercise = [];
         const whereClause = {};
 
-        if (groupMuscle && groupMuscle !== 'null') { // Check for null and string "null"
+        if (groupMuscle && groupMuscle !== 'null') {
             whereClause['$GroupMuscle.name$'] = { [Op.iLike]: groupMuscle };
         }
-        if (difficulty && difficulty !== 'null') { // Check for null and string "null"
+        if (difficulty && difficulty !== 'null') {
             whereClause['$Difficulty.name$'] = { [Op.iLike]: difficulty };
         }
-        if (equipment && equipment !== 'null') { // Check for null and string "null"
+        if (equipment && equipment !== 'null') {
             whereClause['$Equipment.name$'] = { [Op.iLike]: equipment };
         }
         exercise = await db.Exercise.findAll({
@@ -30,27 +31,26 @@ const getExerciseByOptions = async (groupMuscle, difficulty, equipment) => {
             attributes: ['name', 'step', 'step_vi', 'video_male', 'video_female', 'description', 'description_vi', 'link_description'],
             include: [
                 {
-                    association: 'GroupMuscle',
+                    model: db.GroupMuscle,
                     attributes: ["name"],
-                    required: (groupMuscle && groupMuscle !== 'null') // Only required if groupMuscle is provided and not null
+                    required: (groupMuscle && groupMuscle !== 'null')
                 },
                 {
-                    association: 'Equipment',
+                    model: db.Equipment,
                     attributes: ["name", "icon"],
-                    required: (equipment && equipment !== 'null')  // Only required if equipment is provided and not null
+                    required: (equipment && equipment !== 'null')
                 },
                 {
-                    association: 'Difficulty',
+                    model: db.Difficulty,
                     attributes: ["name"],
-                    required: (difficulty && difficulty !== 'null') // Only required if difficulty is provided and not null
+                    required: (difficulty && difficulty !== 'null')
                 },
             ],
             limit: 3,
             raw: true
         });
 
-
-        if (exercise) { // Check if any exercises were found using length
+        if (exercise.length > 0) {
             return {
                 EC: 0,
                 EM: 'Find Exercise Success',
@@ -64,7 +64,7 @@ const getExerciseByOptions = async (groupMuscle, difficulty, equipment) => {
             };
         }
     } catch (e) {
-        console.error(e); // Log the error for debugging
+        console.error(e);
         return {
             EC: -1,
             EM: 'Error From Service',
@@ -77,13 +77,13 @@ const getExerciseByOptionsPagination = async (groupMuscle, difficulty, equipment
     try {
         const whereClause = {};
 
-        if (groupMuscle && groupMuscle !== 'null') { // Check for null and string "null"
+        if (groupMuscle && groupMuscle !== 'null') {
             whereClause['$GroupMuscle.name$'] = { [Op.iLike]: groupMuscle };
         }
-        if (difficulty && difficulty !== 'null') { // Check for null and string "null"
+        if (difficulty && difficulty !== 'null') {
             whereClause['$Difficulty.name$'] = { [Op.iLike]: difficulty };
         }
-        if (equipment && equipment !== 'null') { // Check for null and string "null"
+        if (equipment && equipment !== 'null') {
             whereClause['$Equipment.name$'] = { [Op.iLike]: equipment };
         }
         const { count, rows } = await db.Exercise.findAndCountAll({
@@ -91,32 +91,31 @@ const getExerciseByOptionsPagination = async (groupMuscle, difficulty, equipment
             attributes: ['name', 'step', 'step_vi', 'video_male', 'video_female', 'description', 'description_vi', 'link_description'],
             include: [
                 {
-                    association: 'GroupMuscle',
+                    model: db.GroupMuscle,
                     attributes: ["name"],
-                    required: (groupMuscle && groupMuscle !== 'null') // Only required if groupMuscle is provided and not null
+                    required: (groupMuscle && groupMuscle !== 'null')
                 },
                 {
-                    association: 'Equipment',
+                    model: db.Equipment,
                     attributes: ["name", "icon"],
-                    required: (equipment && equipment !== 'null')  // Only required if equipment is provided and not null
+                    required: (equipment && equipment !== 'null')
                 },
                 {
-                    association: 'Difficulty',
+                    model: db.Difficulty,
                     attributes: ["name"],
-                    required: (difficulty && difficulty !== 'null') // Only required if difficulty is provided and not null
+                    required: (difficulty && difficulty !== 'null')
                 },
             ],
             limit: limit,
-            offset: ((page - 1) * limit + 1),
+            offset: (page - 1) * limit,
             raw: true
         });
 
-
-        if (count > 0) { // Check if any exercises were found using length
+        if (count > 0) {
             return {
                 EC: 0,
                 EM: 'Find Exercise Success',
-                DT: { "Total page": Math.floor(count / limit), "exercise": rows, "Total exercise": count }
+                DT: { "Total page": Math.ceil(count / limit), "exercise": rows, "Total exercise": count }
             };
         } else {
             return {
@@ -126,7 +125,7 @@ const getExerciseByOptionsPagination = async (groupMuscle, difficulty, equipment
             };
         }
     } catch (e) {
-        console.error(e); // Log the error for debugging
+        console.error(e);
         return {
             EC: -1,
             EM: 'Error From Service',
@@ -138,41 +137,37 @@ const getExerciseByOptionsPagination = async (groupMuscle, difficulty, equipment
 const getExerciseByMultipleOptions = async (groupMuscle, difficulty, equipment, limit, page) => {
     try {
         const whereClause = {};
-        console.log(groupMuscle, difficulty, equipment)
-        // Ensure arrays for the where clause:
+        console.log(groupMuscle, difficulty, equipment);
+
         if (groupMuscle && groupMuscle !== 'null') {
-            // groupMuscle = JSON.parse(groupMuscle)
             whereClause['$GroupMuscle.name$'] = { [Op.in]: Array.isArray(groupMuscle) ? groupMuscle : [groupMuscle] };
         }
         if (difficulty && difficulty !== 'null') {
-            // difficulty = JSON.parse(difficulty)
             whereClause['$Difficulty.name$'] = { [Op.in]: Array.isArray(difficulty) ? difficulty : [difficulty] };
         }
         if (equipment && equipment !== 'null') {
-            // equipment = JSON.parse(equipment)
             whereClause['$Equipment.name$'] = { [Op.in]: Array.isArray(equipment) ? equipment : [equipment] };
         }
-
 
         const { count, rows } = await db.Exercise.findAndCountAll({
             where: whereClause,
             attributes: ['name', 'step', 'step_vi', 'video_male', 'video_female', 'description', 'description_vi', 'link_description'],
             include: [
                 {
-                    model: db.GroupMuscle, // Use model instead of association
+                    model: db.GroupMuscle,
                     attributes: ["name"],
                 },
                 {
-                    model: db.Equipment, // Use model instead of association
+                    model: db.Equipment,
                     attributes: ["name", "icon"],
                 },
                 {
-                    model: db.Difficulty, // Use model instead of association
+                    model: db.Difficulty,
                     attributes: ["name"],
                 },
             ],
             limit: limit,
-            offset: (page - 1) * limit, // Correct offset calculation
+            offset: (page - 1) * limit,
             raw: true,
         });
 
@@ -184,9 +179,9 @@ const getExerciseByMultipleOptions = async (groupMuscle, difficulty, equipment, 
             };
         } else {
             return {
-                EC: 1, // Consider using a more informative EC like 404 (Not Found) if no exercises match
-                EM: 'Find Exercise Fail', // Or "No exercises found matching criteria"
-                DT: [] // Return an empty array if no results
+                EC: 1,
+                EM: 'Find Exercise Fail',
+                DT: []
             };
         }
     } catch (e) {
@@ -201,13 +196,13 @@ const getExerciseByMultipleOptions = async (groupMuscle, difficulty, equipment, 
 
 const getEquipmentAll = async () => {
     try {
-        let equipment = []
+        let equipment = [];
 
         equipment = await db.Equipment.findAll({
             attributes: ['name', 'icon'],
         });
 
-        if (equipment) { // Check if any equipments were found
+        if (equipment.length > 0) {
             return {
                 EC: 0,
                 EM: 'Find Equipment Success',
@@ -221,7 +216,7 @@ const getEquipmentAll = async () => {
             };
         }
     } catch (e) {
-        console.error(e); // Log the error for debugging
+        console.error(e);
         return {
             EC: -1,
             EM: 'Error From Service',
@@ -230,16 +225,15 @@ const getEquipmentAll = async () => {
     }
 };
 
-
 const getGroupMuscleAll = async () => {
     try {
-        let groupMuscle = []
+        let groupMuscle = [];
 
         groupMuscle = await db.GroupMuscle.findAll({
             attributes: ['name'],
         });
 
-        if (groupMuscle) { // Check if any groupMuscles were found
+        if (groupMuscle.length > 0) {
             return {
                 EC: 0,
                 EM: 'Find Group Muscle Success',
@@ -253,7 +247,7 @@ const getGroupMuscleAll = async () => {
             };
         }
     } catch (e) {
-        console.error(e); // Log the error for debugging
+        console.error(e);
         return {
             EC: -1,
             EM: 'Error From Service',
@@ -264,31 +258,31 @@ const getGroupMuscleAll = async () => {
 
 const getExerciseAll = async () => {
     try {
-
         const { count, rows } = await db.Exercise.findAndCountAll({ attributes: ['name'] });
 
-        if (count > 0) { // Check if any groupMuscles were found
+        if (count > 0) {
             return {
                 EC: 0,
-                EM: 'Find Group Muscle Success',
+                EM: 'Find Exercise Success',
                 DT: count
             };
         } else {
             return {
                 EC: 1,
-                EM: 'Find Group Muscle Fail',
+                EM: 'Find Exercise Fail',
                 DT: 0
             };
         }
     } catch (e) {
-        console.error(e); // Log the error for debugging
+        console.error(e);
         return {
             EC: -1,
             EM: 'Error From Service',
             DT: []
         };
     }
-}
+};
+
 module.exports = {
     getExercise, getExerciseByOptions, getEquipmentAll, getGroupMuscleAll, getExerciseByOptionsPagination, getExerciseAll, getExerciseByMultipleOptions,
-}
+};

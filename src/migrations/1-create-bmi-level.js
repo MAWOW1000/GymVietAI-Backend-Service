@@ -9,19 +9,26 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      description_vi: {
+        type: Sequelize.STRING,
+        allowNull: false
       },
       createdAt: {
+        allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.fn('NOW')
       },
       updatedAt: {
+        allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.fn('NOW')
       }
-    });
+    }, { schema: 'public' });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('BmiLevel');
+    await queryInterface.dropTable('BmiLevel', { schema: 'public' });
   }
 };

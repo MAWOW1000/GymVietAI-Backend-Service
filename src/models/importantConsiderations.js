@@ -12,8 +12,21 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true
         },
-        workout_plan_id: DataTypes.INTEGER,
-        description: DataTypes.STRING
+        workout_plan_id: {
+            type: DataTypes.UUID,
+            references: {
+                model: 'WorkoutPlan',
+                key: 'workout_plan_id'
+            }
+        },
+        description: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        description_vi: {
+            type: DataTypes.STRING,
+            allowNull: false
+        }
     }, {
         sequelize,
         modelName: 'ImportantConsiderations',

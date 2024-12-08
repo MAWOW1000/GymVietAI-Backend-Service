@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Exercise extends Model {
     /**
@@ -11,22 +9,49 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Exercise.belongsTo(models.GroupMuscle, { foreignKey: 'group_muscle_id' })
-      Exercise.belongsTo(models.Equipment, { foreignKey: 'equipment_id' })
-      Exercise.belongsTo(models.Difficulty, { foreignKey: 'difficulty_id' })
+      Exercise.belongsTo(models.GroupMuscle, { foreignKey: 'group_muscle_id' });
+      Exercise.belongsTo(models.Equipment, { foreignKey: 'equipment_id' });
+      Exercise.belongsTo(models.Difficulty, { foreignKey: 'difficulty_id' });
     }
-  };
+  }
   Exercise.init({
-    name: DataTypes.STRING,
-    video_male: DataTypes.STRING,
-    video_female: DataTypes.STRING,
-    description: DataTypes.STRING,
-    description_vi: DataTypes.STRING,
-    step: DataTypes.STRING,
-    step_vi: DataTypes.STRING,
+    exercise_id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    name_vi: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    video_male: DataTypes.TEXT,
+    video_female: DataTypes.TEXT,
+    description: DataTypes.TEXT,
+    description_vi: DataTypes.TEXT,
+    link_description: DataTypes.TEXT,
+    step: DataTypes.TEXT,
+    step_vi: DataTypes.TEXT,
+    group_muscle_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    equipment_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    difficulty_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'Exercise',
+    tableName: 'Exercise',
+    timestamps: true
   });
   return Exercise;
 };

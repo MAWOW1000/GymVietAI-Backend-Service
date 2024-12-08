@@ -9,42 +9,42 @@ module.exports = {
                 type: Sequelize.INTEGER
             },
             workout_day_id: {
-                type: Sequelize.INTEGER,
-                references: {
-                    model: 'WorkoutDay',
-                    key: 'workout_day_id'
-                }
+                type: Sequelize.INTEGER
             },
             exercise_id: {
-                type: Sequelize.INTEGER,
-                references: {
-                    model: 'Exercise',
-                    key: 'exercise_id'
-                }
+                type: Sequelize.UUID
             },
             sets: {
-                type: Sequelize.INTEGER
+                type: Sequelize.INTEGER,
+                allowNull: false
             },
             reps: {
-                type: Sequelize.STRING
+                type: Sequelize.STRING,
+                allowNull: false
             },
             rest: {
-                type: Sequelize.INTEGER
+                type: Sequelize.INTEGER,
+                allowNull: false
             },
             notes: {
                 type: Sequelize.TEXT
             },
+            notes_vi: {
+                type: Sequelize.TEXT
+            },
             createdAt: {
+                allowNull: false,
                 type: Sequelize.DATE,
                 defaultValue: Sequelize.fn('NOW')
             },
             updatedAt: {
+                allowNull: false,
                 type: Sequelize.DATE,
                 defaultValue: Sequelize.fn('NOW')
             }
-        });
+        }, { schema: 'public' });
     },
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('WorkoutExercise');
+        await queryInterface.dropTable('WorkoutExercise', { schema: 'public' });
     }
 };

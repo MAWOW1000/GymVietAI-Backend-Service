@@ -14,11 +14,27 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true
     },
     workout_day_id: DataTypes.INTEGER,
-    exercise_id: DataTypes.INTEGER,
-    sets: DataTypes.INTEGER,
-    reps: DataTypes.STRING,
-    rest: DataTypes.INTEGER,
-    notes: DataTypes.TEXT
+    exercise_id: {
+      type: DataTypes.UUID,
+      references: {
+        model: 'Exercise',
+        key: 'exercise_id'
+      }
+    },
+    sets: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    reps: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    rest: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    notes: DataTypes.TEXT,
+    notes_vi: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'WorkoutExercise',

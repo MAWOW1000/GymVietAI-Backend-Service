@@ -11,7 +11,13 @@ module.exports = {
             name: {
                 type: Sequelize.STRING
             },
+            name_vi: {
+                type: Sequelize.STRING
+            },
             desciption: {
+                type: Sequelize.STRING
+            },
+            desciption_vi: {
                 type: Sequelize.STRING
             },
             createdAt: {
@@ -25,6 +31,6 @@ module.exports = {
         }, { schema: 'public' });
     },
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('Difficulty');
+        await queryInterface.dropTable('Difficulty', { schema: 'public' });
     }
 };

@@ -12,7 +12,14 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true
         },
-        description: DataTypes.STRING
+        description: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        description_vi: {
+            type: DataTypes.STRING,
+            allowNull: false
+        }
     }, {
         sequelize,
         modelName: 'BmiLevel',

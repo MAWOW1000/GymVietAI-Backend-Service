@@ -9,26 +9,29 @@ module.exports = {
                 type: Sequelize.INTEGER
             },
             workout_plan_id: {
-                type: Sequelize.INTEGER,
-                references: {
-                    model: 'WorkoutPlan',
-                    key: 'workout_plan_id'
-                }
+                type: Sequelize.UUID
             },
             description: {
-                type: Sequelize.STRING
+                type: Sequelize.STRING,
+                allowNull: false
+            },
+            description_vi: {
+                type: Sequelize.STRING,
+                allowNull: false
             },
             createdAt: {
+                allowNull: false,
                 type: Sequelize.DATE,
                 defaultValue: Sequelize.fn('NOW')
             },
             updatedAt: {
+                allowNull: false,
                 type: Sequelize.DATE,
                 defaultValue: Sequelize.fn('NOW')
             }
-        });
+        }, { schema: 'public' });
     },
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('ImportantConsiderations');
+        await queryInterface.dropTable('ImportantConsiderations', { schema: 'public' });
     }
 };

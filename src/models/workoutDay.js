@@ -13,8 +13,22 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true
         },
-        workout_plan_id: DataTypes.INTEGER,
-        day_of_week: DataTypes.INTEGER
+        workout_plan_id: {
+            type: DataTypes.UUID,
+            references: {
+                model: 'WorkoutPlan',
+                key: 'workout_plan_id'
+            }
+        },
+        workout_week_id: DataTypes.INTEGER,
+        day_of_week: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        day_of_week_vi: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        }
     }, {
         sequelize,
         modelName: 'WorkoutDay',
