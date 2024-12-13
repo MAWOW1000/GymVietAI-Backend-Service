@@ -125,7 +125,7 @@ const postCreateExercise = async (req, res) => {
         }
 
         // Call the AI server API
-        const response = await axios.post('http://127.0.0.1:5001/api/workout-plan', {
+        const bmi_result = await axios.post('http://127.0.0.1:5001/api/workout-plan', {
             Gender,
             Weight,
             Height,
@@ -133,12 +133,36 @@ const postCreateExercise = async (req, res) => {
             continent,
         });
 
-        // Return the response from the AI server to the client
-        return res.status(200).json({
-            EC: 0,
-            EM: 'Success',
-            DT: response.data
-        });
+        if (bmi_result.data.EC !== 0) {
+            return res.status(400).json({
+                EC: bmi_result.data.EC,
+                EM: bmi_result.data.EM,
+                DT: ""
+            });
+        }
+        const result = await exerciseService.getWorkoutPlan(bmi_result.data.DT[0]);
+
+        if (result.EC === 0) {
+            return res.status(200).json({
+                EC: result.EC,
+                EM: result.EM,
+                DT: result.DT
+            })
+        }
+        else if(result.EC === 1) {
+            return res.status(400).json({
+                EC: result.EC,
+                EM: result.EM,
+                DT: result.DT
+            });
+        }
+        else{
+            return res.status(500).json({
+                EC: result.EC,
+                EM: result.EM,
+                DT: result.DT
+            });
+        }
     } catch (err) {
         console.error(err); // Log the error for debugging
         return res.status(500).json({

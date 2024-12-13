@@ -15,8 +15,6 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: DataTypes.UUIDV4
         },
         bmi_level_id: DataTypes.INTEGER,
-        workout_week_id: DataTypes.INTEGER,
-        consideration_id: DataTypes.INTEGER,
         training_split: {
             type: DataTypes.STRING,
             allowNull: false

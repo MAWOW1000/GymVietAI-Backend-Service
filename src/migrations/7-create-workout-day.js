@@ -1,19 +1,23 @@
 'use strict';
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('WorkoutWeek', {
-            workout_week_id: {
+        await queryInterface.createTable('WorkoutDay', {
+            workout_day_id: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: Sequelize.INTEGER
             },
-            workout_plan_id: {
-                type: Sequelize.UUID
-            },
-            week_number: {
-                type: Sequelize.INTEGER,
+            day_of_week: {
+                type: Sequelize.STRING,
                 allowNull: false
+            },
+            day_of_week_vi: {
+                type: Sequelize.STRING,
+                allowNull: false
+            },
+            workout_plan_id: {
+                type: Sequelize.UUID,
             },
             createdAt: {
                 allowNull: false,
@@ -28,6 +32,6 @@ module.exports = {
         }, { schema: 'public' });
     },
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('WorkoutWeek', { schema: 'public' });
+        await queryInterface.dropTable('WorkoutDay', { schema: 'public' });
     }
 };

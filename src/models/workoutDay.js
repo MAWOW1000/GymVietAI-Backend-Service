@@ -20,15 +20,14 @@ module.exports = (sequelize, DataTypes) => {
                 key: 'workout_plan_id'
             }
         },
-        workout_week_id: DataTypes.INTEGER,
         day_of_week: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: false
         },
         day_of_week_vi: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: false
-        }
+        },
     }, {
         sequelize,
         modelName: 'WorkoutDay',

@@ -16,12 +16,6 @@ module.exports = {
             bmi_level_id: {
                 type: Sequelize.INTEGER
             },
-            workout_week_id: {
-                type: Sequelize.INTEGER
-            },
-            consideration_id: {
-                type: Sequelize.INTEGER
-            },
             training_split: {
                 type: Sequelize.STRING,
                 allowNull: false

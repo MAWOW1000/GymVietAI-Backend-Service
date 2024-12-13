@@ -1,4 +1,3 @@
-
 'use strict';
 module.exports = {
     up: async (queryInterface, Sequelize) => {
@@ -15,49 +14,13 @@ module.exports = {
             onDelete: 'CASCADE'
         });
 
-        await queryInterface.addConstraint('WorkoutPlan', {
-            fields: ['workout_week_id'],
-            type: 'foreign key',
-            name: 'fk_workoutplan_workoutweek',
-            references: {
-                table: 'WorkoutWeek',
-                field: 'workout_week_id'
-            },
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE'
-        });
-
-        await queryInterface.addConstraint('WorkoutPlan', {
-            fields: ['consideration_id'],
-            type: 'foreign key',
-            name: 'fk_workoutplan_importantconsiderations',
-            references: {
-                table: 'ImportantConsiderations',
-                field: 'consideration_id'
-            },
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE'
-        });
-
-        await queryInterface.addConstraint('WorkoutWeek', {
+        await queryInterface.addConstraint('WorkoutDay', {
             fields: ['workout_plan_id'],
             type: 'foreign key',
-            name: 'fk_workoutweek_workoutplan',
+            name: 'fk_workoutday_workoutplan',
             references: {
                 table: 'WorkoutPlan',
                 field: 'workout_plan_id'
-            },
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE'
-        });
-
-        await queryInterface.addConstraint('WorkoutDay', {
-            fields: ['workout_week_id'],
-            type: 'foreign key',
-            name: 'fk_workoutday_workoutweek',
-            references: {
-                table: 'WorkoutWeek',
-                field: 'workout_week_id'
             },
             onUpdate: 'CASCADE',
             onDelete: 'CASCADE'
@@ -122,18 +85,28 @@ module.exports = {
             onUpdate: 'CASCADE',
             onDelete: 'CASCADE'
         });
+
+        await queryInterface.addConstraint('ImportantConsiderations', {
+            fields: ['workout_plan_id'],
+            type: 'foreign key',
+            name: 'fk_ImportantConsiderations_workoutplan',
+            references: {
+                table: 'WorkoutPlan',
+                field: 'workout_plan_id'
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        });
     },
     down: async (queryInterface, Sequelize) => {
         // Remove foreign key relationships
         await queryInterface.removeConstraint('WorkoutPlan', 'fk_workoutplan_bmilevel');
-        await queryInterface.removeConstraint('WorkoutPlan', 'fk_workoutplan_workoutweek');
-        await queryInterface.removeConstraint('WorkoutPlan', 'fk_workoutplan_importantconsiderations');
-        await queryInterface.removeConstraint('WorkoutWeek', 'fk_workoutweek_workoutplan');
-        await queryInterface.removeConstraint('WorkoutDay', 'fk_workoutday_workoutweek');
+        await queryInterface.removeConstraint('WorkoutDay', 'fk_workoutday_workoutplan');
         await queryInterface.removeConstraint('WorkoutExercise', 'fk_workoutexercise_workoutday');
         await queryInterface.removeConstraint('WorkoutExercise', 'fk_workoutexercise_exercise');
         await queryInterface.removeConstraint('Exercise', 'fk_exercise_groupmuscle');
         await queryInterface.removeConstraint('Exercise', 'fk_exercise_equipment');
         await queryInterface.removeConstraint('Exercise', 'fk_exercise_difficulty');
+        await queryInterface.removeConstraint('ImportantConsiderations', 'fk_ImportantConsiderations_workoutplan');
     }
 };

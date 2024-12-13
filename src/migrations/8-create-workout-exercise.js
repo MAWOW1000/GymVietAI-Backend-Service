@@ -9,22 +9,19 @@ module.exports = {
                 type: Sequelize.INTEGER
             },
             workout_day_id: {
-                type: Sequelize.INTEGER
+                type: Sequelize.INTEGER,
             },
             exercise_id: {
                 type: Sequelize.UUID
             },
             sets: {
                 type: Sequelize.INTEGER,
-                allowNull: false
             },
             reps: {
                 type: Sequelize.STRING,
-                allowNull: false
             },
             rest: {
                 type: Sequelize.INTEGER,
-                allowNull: false
             },
             notes: {
                 type: Sequelize.TEXT
