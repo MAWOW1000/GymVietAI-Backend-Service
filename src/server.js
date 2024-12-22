@@ -1,6 +1,7 @@
 import express from "express";
 import initApiRoutes from "./routes/initApiRoutes";
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';  // Add this import
 require("dotenv").config();
 
 const app = express();
@@ -42,6 +43,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //test connection db
 // connection();
+
+//config cookie-parser
+app.use(cookieParser());
 
 //init api routes
 initApiRoutes(app);
