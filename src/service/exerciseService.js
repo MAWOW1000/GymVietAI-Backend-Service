@@ -295,7 +295,7 @@ const getWorkoutPlan = async (bmi_level_id) => {
         console.log('bmi_level_id:', bmi_level_id);
         const workout_plan = await db.WorkoutPlan.findOne({
             where: { bmi_level_id: bmi_level_id },
-            attributes: ['training_split', 'training_split_vi', 'goal', 'goal_vi', 'training_level', 'training_level_vi'],
+            attributes: ['workout_plan_id', 'training_split', 'training_split_vi', 'goal', 'goal_vi', 'training_level', 'training_level_vi'],
             include: [
                 {
                     model: db.WorkoutDay,
@@ -361,7 +361,121 @@ const getWorkoutPlan = async (bmi_level_id) => {
     }
 }
 
+const searchExerciseByName = async (searchTerm) => {
+    try {
+        const exercises = await db.Exercise.findAll({
+            where: {
+                [Op.or]: [
+                    { name: { [Op.iLike]: `%${searchTerm}%` } },
+                    { name_vi: { [Op.iLike]: `%${searchTerm}%` } }
+                ]
+            },
+            attributes: ['name', 'name_vi', 'step', 'step_vi', 'video_male', 'video_female', 'description', 'description_vi', 'link_description'],
+            include: [
+                {
+                    model: db.GroupMuscle,
+                    attributes: ["name", "name_vi"],
+                },
+                {
+                    model: db.Equipment,
+                    attributes: ["name", "name_vi", "icon"],
+                },
+                {
+                    model: db.Difficulty,
+                    attributes: ["name", "name_vi"],
+                },
+            ],
+            raw: true
+        });
+
+        return {
+            EC: exercises.length > 0 ? 0 : 1,
+            EM: exercises.length > 0 ? 'Search Exercise Success' : 'No exercises found',
+            DT: exercises
+        };
+    } catch (e) {
+        console.error(e);
+        return {
+            EC: -1,
+            EM: 'Error From Service',
+            DT: []
+        };
+    }
+};
+
+const createExercise = async (exerciseData) => {
+    try {
+        const newExercise = await db.Exercise.create(exerciseData);
+        return {
+            EC: 0,
+            EM: 'Create Exercise Success',
+            DT: newExercise
+        };
+    } catch (e) {
+        console.error(e);
+        return {
+            EC: -1,
+            EM: 'Error From Service',
+            DT: []
+        };
+    }
+};
+
+const updateExercise = async (exerciseId, exerciseData) => {
+    try {
+        const exercise = await db.Exercise.findByPk(exerciseId);
+        if (!exercise) {
+            return {
+                EC: 1,
+                EM: 'Exercise not found',
+                DT: []
+            };
+        }
+
+        await exercise.update(exerciseData);
+        return {
+            EC: 0,
+            EM: 'Update Exercise Success',
+            DT: exercise
+        };
+    } catch (e) {
+        console.error(e);
+        return {
+            EC: -1,
+            EM: 'Error From Service',
+            DT: []
+        };
+    }
+};
+
+const deleteExercise = async (exerciseId) => {
+    try {
+        const exercise = await db.Exercise.findByPk(exerciseId);
+        if (!exercise) {
+            return {
+                EC: 1,
+                EM: 'Exercise not found',
+                DT: []
+            };
+        }
+
+        await exercise.destroy();
+        return {
+            EC: 0,
+            EM: 'Delete Exercise Success',
+            DT: []
+        };
+    } catch (e) {
+        console.error(e);
+        return {
+            EC: -1,
+            EM: 'Error From Service',
+            DT: []
+        };
+    }
+};
+
 module.exports = {
     getExercise, getExerciseByOptions, getEquipmentAll, getGroupMuscleAll, getExerciseByOptionsPagination,
-    getExerciseAll, getExerciseByMultipleOptions, getWorkoutPlan
+    getExerciseAll, getExerciseByMultipleOptions, getWorkoutPlan, searchExerciseByName, createExercise, updateExercise, deleteExercise
 };

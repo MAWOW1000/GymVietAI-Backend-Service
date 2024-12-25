@@ -16,7 +16,15 @@ router.get("/number-of-exercise", exerciseController.getNumberOfExercise)
 router.get("/equipments", exerciseController.getListEquipment)
 router.get("/group-muscles", exerciseController.getListGroupMuscle)
 
+// Search exercise
+router.get("/search", exerciseController.searchExercise)
+
+// CRUD operations
+router.post("/create", verifyTokenWithCookies, exerciseController.createNewExercise)
+router.put("/update/:id", verifyTokenWithCookies, exerciseController.updateExerciseById)
+router.delete("/delete/:id", verifyTokenWithCookies, exerciseController.deleteExerciseById)
+
 //Call to AI server
-router.post("/create-exercise", verifyTokenWithCookies ,exerciseController.postCreateExercise)
+router.post("/create-workout-plan", verifyTokenWithCookies, exerciseController.postCreateWorkoutPlan)
 
 export default router;
